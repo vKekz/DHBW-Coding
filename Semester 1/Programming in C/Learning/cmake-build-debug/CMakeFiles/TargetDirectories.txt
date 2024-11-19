@@ -1,0 +1,4 @@
+C:/Users/k3kzc/Development/DHBW/DHBW-Coding/Semester 1/Programming in C/Learning/cmake-build-debug/CMakeFiles/GameOfLife.dir
+C:/Users/k3kzc/Development/DHBW/DHBW-Coding/Semester 1/Programming in C/Learning/cmake-build-debug/CMakeFiles/Ackermann.dir
+C:/Users/k3kzc/Development/DHBW/DHBW-Coding/Semester 1/Programming in C/Learning/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/k3kzc/Development/DHBW/DHBW-Coding/Semester 1/Programming in C/Learning/cmake-build-debug/CMakeFiles/rebuild_cache.dir
