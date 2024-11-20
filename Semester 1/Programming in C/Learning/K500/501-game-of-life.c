@@ -33,7 +33,7 @@ see: http://en.wikipedia.org/wiki/Conway's_Game_of_Life
 #define HEIGHT 30
 #define WIDTH 100
 
-#define DELAY 50
+#define DELAY 10
 
 #define DEAD_PROBABILITY 85
 
@@ -65,6 +65,9 @@ int main() {
 
    InitCells();
    DisplayCells();
+
+   // One clear is needed to remove any weird console bugs
+   system("cls");
 
    while (1) {
       DisplayCells();
