@@ -28,26 +28,41 @@ see: http://en.wikipedia.org/wiki/Conway's_Game_of_Life
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <Windows.h>
+
+#define HEIGHT 30
+#define WIDTH 100
+
+#define DELAY 50
 
 #define DEAD_PROBABILITY 85
-#define ALIVE '1'
-#define DEAD '0'
+
+#define ALIVE 1
+#define DEAD 0
+
+#define ALIVE_SYMBOL '#'
+#define DEAD_SYMBOL '-'
 
 // Global 2-dim-array which contains the cells
-char cells[30][50];
+int cells[HEIGHT][WIDTH];
+
+// +1 for null-byte and new-line
+char string_buffer[HEIGHT * (WIDTH + 1) + 1] = { "0" };
 
 void InitCells();
 
 void DisplayCells();
 
-void EvolutionStep();
+void GenerationStep();
 
 int CountLivingCells();
 
-int CountLivingNeighbours(const char prev_cells[30][50], int x, int y);
+int CountLivingNeighbours(const int prev_cells[HEIGHT][WIDTH], int x, int y);
 
 // Main program
 int main() {
+   int generation = 0;
+
    InitCells();
    DisplayCells();
 
@@ -56,22 +71,23 @@ int main() {
 
       // Leave loop if there are no more occupied cells
       const int living_cells = CountLivingCells();
-      if (living_cells == 0)
+      if (living_cells == 0) {
          break;
+      }
 
-      printf("Press enter\n");
-      printf("Anzahl der Lebenden: %d", living_cells);
-      getchar();
+      printf("Population: %d\n", living_cells);
+      printf("Generation: %d\n\n", generation++);
 
-      EvolutionStep();
+      GenerationStep();
+      Sleep(DELAY);
    }
 }
 
 void InitCells() {
    srand(time(0));
 
-   for (int i = 0; i < 30; i++) {
-      for (int j = 0; j < 50; j++) {
+   for (int i = 0; i < HEIGHT; i++) {
+      for (int j = 0; j < WIDTH; j++) {
          const int percentage = rand() % 100;
          cells[i][j] = percentage > DEAD_PROBABILITY ? ALIVE : DEAD;
       }
@@ -79,49 +95,55 @@ void InitCells() {
 }
 
 void DisplayCells() {
-   system("cls");
+   int index = 0;
 
-   for (int i = 0; i < 30; i++) {
-      for (int j = 0; j < 50; j++) {
-         printf("%c", cells[i][j]);
+   for (int i = 0; i < HEIGHT; i++) {
+      for (int j = 0; j < WIDTH; j++) {
+         const int cell = cells[i][j];
+         string_buffer[index++] = cell == ALIVE ? ALIVE_SYMBOL : DEAD_SYMBOL;
       }
-      printf("\n");
+      string_buffer[index++] = '\n';
    }
+   string_buffer[index] = '\0';
+
+   // system("cls") still caused flickering
+   printf("\033[H");
+   printf("%s", string_buffer);
 }
 
-void EvolutionStep() {
-   char cells_helper[30][50];
+void GenerationStep() {
+   int cells_helper[HEIGHT][WIDTH];
 
-   for (int i = 0; i < 30; i++) {
-      for (int j = 0; j < 50; j++) {
+   for (int i = 0; i < HEIGHT; i++) {
+      for (int j = 0; j < WIDTH; j++) {
          cells_helper[i][j] = cells[i][j];
       }
    }
 
-   for (int i = 0; i < 30; i++) {
-      for (int j = 0; j < 50; j++) {
-         const char cell = cells_helper[i][j];
+   for (int i = 0; i < HEIGHT; i++) {
+      for (int j = 0; j < WIDTH; j++) {
+         const int cell = cells_helper[i][j];
          const int neighbours = CountLivingNeighbours(cells_helper, i, j);
 
          if (cell == ALIVE) {
-            // First rule
-            if (neighbours < 2) {
-               cells[i][j] = DEAD;
+            switch (neighbours) {
+               // First rule
+               case 0:
+               case 1:
+                  cells[i][j] = DEAD;
+                  break;
+               // Second rule
+               case 2:
+               case 3:
+                  cells[i][j] = ALIVE;
+                  break;
+               // Third rule
+               default:
+                  cells[i][j] = DEAD;
+                  break;
             }
-
-            // Second rule
-            if (neighbours == 2 || neighbours == 3) {
-               cells[i][j] = ALIVE;
-            }
-
-            // Third rule
-            if (neighbours > 3) {
-               cells[i][j] = DEAD;
-            }
-         }
-
-         // Fourth rule
-         if (cell == DEAD) {
+         } else {
+            // Fourth rule
             if (neighbours == 3) {
                cells[i][j] = ALIVE;
             }
@@ -133,9 +155,9 @@ void EvolutionStep() {
 int CountLivingCells() {
    int count = 0;
 
-   for (int i = 0; i < 30; i++) {
-      for (int j = 0; j < 50; j++) {
-         const char cell = cells[i][j];
+   for (int i = 0; i < HEIGHT; i++) {
+      for (int j = 0; j < WIDTH; j++) {
+         const int cell = cells[i][j];
 
          if (cell == ALIVE) {
             count++;
@@ -146,17 +168,21 @@ int CountLivingCells() {
    return count;
 }
 
-int CountLivingNeighbours(const char prev_cells[30][50], const int x, const int y) {
+int CountLivingNeighbours(const int prev_cells[HEIGHT][WIDTH], const int x, const int y) {
    int count = 0;
 
    for (int i = -1; i <= 1; i++) {
       for (int j = -1; j <= 1; j++) {
-         if (i != 0 && j != 0) {
-            const char neighbour_cell = prev_cells[x + i][y + j];
+         if (i == 0 && j == 0) {
+            continue;
+         }
 
-            if (neighbour_cell == ALIVE) {
-               count++;
-            }
+         const int row = (x + i + HEIGHT) % HEIGHT;
+         const int colum = (y + j + WIDTH) % WIDTH;
+
+         const int neighbour_cell = prev_cells[row][colum];
+         if (neighbour_cell == ALIVE) {
+            count++;
          }
       }
    }
