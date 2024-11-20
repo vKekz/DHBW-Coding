@@ -35,7 +35,8 @@ int main()
    const int result = AckermannRecursion(m, n);
 
    printf("\nValue for m=%d n=%d: %d\n", m, n, result);
-   printf("Recursive calls: %lld", function_calls);
+   printf("Recursive calls: %lld\n", function_calls);
+   printf("Depth: %d", recursion_depth);
 }
 
 int AckermannRecursion(const int m, const int n) {
@@ -50,12 +51,11 @@ int AckermannRecursion(const int m, const int n) {
    }
 
    if (m > 0) {
+      recursion_depth++;
       if (n == 0) {
-         recursion_depth++;
          return AckermannRecursion(m - 1, 1);
       }
       if (n > 0) {
-         recursion_depth++;
          return AckermannRecursion(m - 1, AckermannRecursion(m, n - 1));
       }
    }
