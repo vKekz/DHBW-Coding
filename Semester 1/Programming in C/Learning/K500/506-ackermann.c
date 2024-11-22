@@ -17,10 +17,15 @@
 
 #include <stdio.h>
 
-long long function_calls = 0;
-int recursion_depth = 0;
+#define DEBUG_DEPTH_WITH_ARGUMENTS 0
+#define DEBUG_DEPTH_BAR 1
+
+unsigned int recursion_depth = 0;
+unsigned int max_recursion_depth = 0;
 
 int AckermannRecursion(int m, int n);
+
+void DisplayDepthBars(unsigned int depth);
 
 int main()
 {
@@ -34,31 +39,55 @@ int main()
 
    const int result = AckermannRecursion(m, n);
 
-   printf("\nValue for m=%d n=%d: %d\n", m, n, result);
-   printf("Recursive calls: %lld\n", function_calls);
-   printf("Depth: %d", recursion_depth);
+   printf("\nMaximum depth: %u\n", max_recursion_depth);
+   printf("A(m=%d, n=%d) = %d", m, n, result);
 }
 
 int AckermannRecursion(const int m, const int n) {
-   // printf("(%lld) m=%d n=%d\n", ++function_calls, m, n);
-   function_calls++;
+   recursion_depth++;
 
-   printf("depth: %d\n", recursion_depth);
+   if (recursion_depth > max_recursion_depth) {
+      max_recursion_depth = recursion_depth;
+   }
 
+   if (DEBUG_DEPTH_WITH_ARGUMENTS) {
+      printf("(depth=%u) m=%d n=%d\n", recursion_depth, m, n);
+   }
+
+   if (DEBUG_DEPTH_BAR) {
+      DisplayDepthBars(recursion_depth);
+   }
+
+   int result = 1;
    if (m == 0) {
-      recursion_depth--;
-      return n + 1;
+      result = n + 1;
    }
 
    if (m > 0) {
-      recursion_depth++;
       if (n == 0) {
-         return AckermannRecursion(m - 1, 1);
+         result = AckermannRecursion(m - 1, 1);
       }
       if (n > 0) {
-         return AckermannRecursion(m - 1, AckermannRecursion(m, n - 1));
+         result = AckermannRecursion(m - 1, AckermannRecursion(m, n - 1));
       }
    }
 
-   return 1;
+   if (DEBUG_DEPTH_WITH_ARGUMENTS) {
+      printf("(depth=%u) m=%d n=%d\n", recursion_depth, m, n);
+   }
+
+   if (DEBUG_DEPTH_BAR) {
+      DisplayDepthBars(recursion_depth);
+   }
+
+   recursion_depth--;
+   return result;
+}
+
+void DisplayDepthBars(const unsigned int depth) {
+   printf("(depth=%u) ", depth);
+   for (int i = 0; i < depth; i++) {
+      printf("x");
+   }
+   printf("\n");
 }
