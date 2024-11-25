@@ -17,11 +17,11 @@
 
 #include <stdio.h>
 
-#define DEBUG_DEPTH_WITH_ARGUMENTS 0
-#define DEBUG_DEPTH_BAR 1
+#define DEBUG_DEPTH_WITH_ARGUMENTS 1
+#define DEBUG_DEPTH_BAR 0
 
-unsigned int recursion_depth = 0;
 unsigned int max_recursion_depth = 0;
+long function_calls = 0;
 
 int AckermannRecursion(int m, int n);
 
@@ -40,10 +40,14 @@ int main()
    const int result = AckermannRecursion(m, n);
 
    printf("\nMaximum depth: %u\n", max_recursion_depth);
+   printf("Amount of function calls: %ld\n", function_calls);
    printf("A(m=%d, n=%d) = %d", m, n, result);
 }
 
 int AckermannRecursion(const int m, const int n) {
+   static int recursion_depth = 0;
+
+   function_calls++;
    recursion_depth++;
 
    if (recursion_depth > max_recursion_depth) {

@@ -180,6 +180,7 @@ int CountLivingNeighbours(const int prev_cells[HEIGHT][WIDTH], const int x, cons
             continue;
          }
 
+         // + HEIGHT or WIDTH to prevent negative index results
          const int row = (x + i + HEIGHT) % HEIGHT;
          const int colum = (y + j + WIDTH) % WIDTH;
 
