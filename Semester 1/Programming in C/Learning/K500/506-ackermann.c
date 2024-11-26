@@ -17,15 +17,14 @@
 
 #include <stdio.h>
 
-#define DEBUG_DEPTH_WITH_ARGUMENTS 1
-#define DEBUG_DEPTH_BAR 0
+#define VERBOSE 1
 
 unsigned int max_recursion_depth = 0;
 long function_calls = 0;
 
 int AckermannRecursion(int m, int n);
 
-void DisplayDepthBars(unsigned int depth);
+void Verbose(unsigned int depth, int m, int n);
 
 int main()
 {
@@ -54,12 +53,8 @@ int AckermannRecursion(const int m, const int n) {
       max_recursion_depth = recursion_depth;
    }
 
-   if (DEBUG_DEPTH_WITH_ARGUMENTS) {
-      printf("(depth=%u) m=%d n=%d\n", recursion_depth, m, n);
-   }
-
-   if (DEBUG_DEPTH_BAR) {
-      DisplayDepthBars(recursion_depth);
+   if (VERBOSE) {
+      Verbose(recursion_depth, m, n);
    }
 
    int result = 1;
@@ -76,20 +71,16 @@ int AckermannRecursion(const int m, const int n) {
       }
    }
 
-   if (DEBUG_DEPTH_WITH_ARGUMENTS) {
-      printf("(depth=%u) m=%d n=%d\n", recursion_depth, m, n);
-   }
-
-   if (DEBUG_DEPTH_BAR) {
-      DisplayDepthBars(recursion_depth);
+   if (VERBOSE) {
+      Verbose(recursion_depth, m, n);
    }
 
    recursion_depth--;
    return result;
 }
 
-void DisplayDepthBars(const unsigned int depth) {
-   printf("(depth=%u) ", depth);
+void Verbose(const unsigned int depth, const int m, const int n) {
+   printf("(depth=%u m=%d n=%d) ", depth, m, n);
    for (int i = 0; i < depth; i++) {
       printf("x");
    }
