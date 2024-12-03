@@ -35,8 +35,7 @@ typedef struct date {
    int day;
 } Date;
 
-typedef struct person
-{
+typedef struct person {
    char first_name[30];
    char last_name[30];
    enum Gender gender;
@@ -48,10 +47,9 @@ typedef struct person
    Date date_of_enrollment;
 } Person;
 
-Person students[100];
 int students_count = 0;
 
-void InputStudent(const int i) {
+void InputStudent(Person students[100], const int i) {
    char first_name[30];
    printf("Enter First Name: \n");
    scanf("%s", first_name);
@@ -69,24 +67,28 @@ void InputStudent(const int i) {
    students[i].gender = gender;
 }
 
-void AddStudent() {
-   InputStudent(students_count);
-   students_count++;
+void AddStudent(Person students[100]) {
+   InputStudent(students, students_count++);
 }
 
 void DeleteStudent(int i) {
 
 }
 
-void PrintStudentAtIndex(const int i) {
-   Person student = students[i];
-   const Date birth_date = student.birth_date;
+void PrintStudent(Person *student) {
+   const Date birth_date = student -> birth_date;
 
-   printf("- %s, %s (%s) (%d.%d.%d)\n", student.last_name, student.first_name, genders[student.gender],
-      birth_date.day, birth_date.month, birth_date.year);
+   printf("- %s, %s (%s) (%d.%d.%d)\n",
+      student -> last_name,
+      student -> first_name,
+      genders[student -> gender],
+      birth_date.day,
+      birth_date.month,
+      birth_date.year
+   );
 }
 
-void PrintAllStudents() {
+void PrintAllStudents(Person students[100]) {
    if (students_count == 0) {
       printf("No Students Found\n");
       return;
@@ -94,11 +96,11 @@ void PrintAllStudents() {
 
    printf("Students List: %d\n", students_count);
    for (int i = 0; i < students_count; i++) {
-      PrintStudentAtIndex(i);
+      PrintStudent(students + i);
    }
 }
 
-void Menu() {
+void Menu(Person students[100]) {
    while (1) {
       printf("\n");
       printf("Select an action:\n");
@@ -111,10 +113,10 @@ void Menu() {
 
       switch (action) {
          case ADD_STUDENT:
-            AddStudent();
+            AddStudent(students);
             break;
          case PRINT_STUDENTS:
-            PrintAllStudents();
+            PrintAllStudents(students);
             break;
          case QUIT:
             return;
@@ -125,5 +127,6 @@ void Menu() {
 }
 
 int main() {
-   Menu();
+   Person students[100];
+   Menu(students);
 }
