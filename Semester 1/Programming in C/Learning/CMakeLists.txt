@@ -16,3 +16,6 @@ add_executable(AddressList K600/601-address-list.c)
 add_executable(VariablesAndMemory K700/701-variables_and_memory.c)
 add_executable(Pointers K700/702-pointers.c)
 add_executable(Malloc K700/703-malloc_eratosthenes.c)
+
+
+add_executable(Gedankenprotokoll gedankenProtokoll.c)
