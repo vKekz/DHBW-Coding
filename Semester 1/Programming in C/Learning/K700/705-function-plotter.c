@@ -15,31 +15,26 @@
 #include <stdio.h>
 
 // Display function 
-void draw_function(double (*f)(double))
-{
-   double x, y, y_step; 
-   
-   y_step=0.2; 
-   for(y=2; y>=-2; y-=y_step) {
-      for(x=-10; x<10; x+=0.5) {
-          printf("%c", ((*f)(x)>=y && (*f)(x)<y+y_step)? '*': ' ');
-		  // Dereferencing *-operator is optional:
-		  // f(x) would also work
-      }
-	  printf("\n");
-   }
+void draw_function(double (*f)(double)) {
+	const double y_step = 0.5;
+	for (double y = 10; y >= -10; y -= y_step) {
+		for (double x = -10; x < 10; x += 0.5) {
+			printf("%c", ((*f)(x) >= y && (*f)(x) < y + y_step) ? '*' : ' ');
+			// Dereferencing *-operator is optional:
+			// f(x) would also work
+		}
+		printf("\n");
+	}
 }
 
 // Mathematical function to be displayed 
-double my_function(double x)
-{
-     return 1.5*sin(x);
+double my_function(double x) {
+	return -x * x;
 }
 
-int main()
-{
-    double (*fn_ptr)(double);     // Defines a variable pointing to a function
-                                  // double some_function_name(double);
-    fn_ptr=&my_function;          // & can be omitted
-    draw_function(fn_ptr);        // or directly: draw_function(my_function);
+int main() {
+	double (*fn_ptr)(double); // Defines a variable pointing to a function
+	// double some_function_name(double);
+	fn_ptr = &my_function; // & can be omitted
+	draw_function(fn_ptr); // or directly: draw_function(my_function);
 }

@@ -16,10 +16,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct my_struct {
-    int a;
-};
-
 int main() {
     int max;
     printf("Enter max number: \n");
