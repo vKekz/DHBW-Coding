@@ -17,6 +17,8 @@
 #include <stdio.h>
 #include <Windows.h>
 
+#define MAX_STUDENTS 100
+
 enum Action {
    ADD_STUDENT,
    PRINT_STUDENTS,
@@ -127,6 +129,15 @@ void Menu(Person students[100]) {
 }
 
 int main() {
-   Person students[100];
+   Person *students = malloc(MAX_STUDENTS * sizeof(Person));
+
+   if (students == NULL) {
+      printf("Memory Error\n");
+      return -1;
+   }
+
    Menu(students);
+   free(students);
+
+   return 0;
 }

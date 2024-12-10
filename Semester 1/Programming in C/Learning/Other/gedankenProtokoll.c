@@ -116,18 +116,20 @@ typedef union t_mytype{
     int t_int;
 } MyType;
 
-union t_mytype* getmemory(int n){
-    // union t_mytype* pointer = malloc(n * sizeof(union t_mytype));
+MyType * getmemory(int n){
+    // MyType * pointer = malloc(n * sizeof(MyType));
     // return pointer;
-    return malloc(n * sizeof(union t_mytype));
+
+
+    return malloc(n * sizeof(MyType));
 }
 
 void doubleFunction(int n){
     union t_mytype* pointer = getmemory(n);
     if (pointer == NULL) {
-        prinft("Konnte nicht Speicher besetzten");
+        printf("Konnte nicht Speicher besetzten");
     } else {
-        usememory();
+        // usememory();
         free(pointer);
     }
 }

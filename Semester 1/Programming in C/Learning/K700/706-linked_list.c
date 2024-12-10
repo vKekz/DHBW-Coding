@@ -35,88 +35,103 @@
 #include <stdlib.h>
 
 // Data structure of the individual items in the list.
-struct myListItemStruct { 
-    int guid;                 // a unique id to identify the list item
-    char name[128];           // a name to represent the item 
-	unsigned char data[200];  // arbitrary data 'payload'
-	int size;                 // size of data
-    struct myListItemStruct *next_item;   // pointer to next item
+struct node {
+    int guid; // a unique id to identify the list item
+    float d;
+    char name[128]; // a name to represent the item
+    unsigned char data[200]; // arbitrary data 'payload'
+    int size; // size of data
+    struct node *next_item; // pointer to next item
 };
 
 // Define an own type for shorter declarations
-typedef struct myListItemStruct itemType;    
+typedef struct node Node;
 
 // create_item:
 // Creates and initializes a new item, or returns NULL, if it could not allocate memory.
-itemType *create_item()
-{
-   static int guid_ctr=0;    // static counter to create unique ids
-   itemType *ptr;
+Node *create_item() {
+    static int guid_ctr = 0; // static counter to create unique ids
+    Node *ptr = malloc(sizeof(Node)); // Allocate memory for the list item
 
-   ptr=malloc(sizeof(itemType));   // Allocate memory for the list item
-   if(ptr!=NULL) {
-	  ptr->guid=guid_ctr++;   // Generate a unique ID
-      printf("Enter name");
-      scanf("%s",ptr->name);  // Enter a name
-      // TODO ptr->data[..] = ....
-      // TODO ptr->size=...;
-   }
-   return ptr;    // Return pointer to the new item
+    if (ptr != NULL) {
+        ptr->guid = guid_ctr++; // Generate a unique ID
+        ptr -> d = rand() % 100;
+        printf("Enter name");
+        scanf("%s", ptr->name); // Enter a name
+        // TODO ptr->data[..] = ....
+        // TODO ptr->size=...;
+    }
+
+    return ptr; // Return pointer to the new item
 }
 
 // Insert_item:
 // Inserts an existing item into the (potentially empty) list
-void insert_item(itemType *new_item, itemType **list_ptr)
-{
-	new_item->next_item=*list_ptr;   // Append existing list to new item
-	*list_ptr=new_item;              // Set list_ptr to points to new item
+void insert_item(Node *new_item, Node **list_ptr) {
+    new_item -> next_item = *list_ptr; // Append existing list to new item
+    *list_ptr = new_item; // Set list_ptr to points to new item
 }
 
 
 // print all items
-void print_items(itemType *list_start)
-{
-// TO DO.... 
-
+void print_items(Node *list_start) {
+    // TO DO....
 }
 
-// Finds an item with guid in the list 
-itemType *find_item(int guid, itemType *list_start)
-{
-
+// Finds an item with guid in the list
+Node *find_item(int guid, Node *list_start) {
 }
 
 // Deletes an item and returns the successor of the deleted item
-// The chaining of the previous and next element has to be done 
+// The chaining of the previous and next element has to be done
 // by the caller.
-itemType *simple_delete_item(itemType *item)
-{
-
-
+Node *simple_delete_item(Node *item) {
 }
 
 // Complete delete item
 // Deletes item 'to_delete' from the 'list'
 // return 0, if the item does not exist in the list, otherwise 1
-int delete_item(itemType *to_delete, itemType **list_ptr)
-{
-	// TO DO: Check if list (i.e. *list_ptr) is not NULL
-	// TO DO: Check special case, if first list element is to be deleted
-	//        The list_ptr needs to be changed, to point to second list element
-	// TO DO: General case: move through list with a helper pointer
-	// TO DO: Don't forget to free the memory of the list element (TODO5: and its data payload)
+int delete_item(Node *to_delete, Node **list_ptr) {
+    // TO DO: Check if list (i.e. *list_ptr) is not NULL
+    // TO DO: Check special case, if first list element is to be deleted
+    //        The list_ptr needs to be changed, to point to second list element
+    // TO DO: General case: move through list with a helper pointer
+    // TO DO: Don't forget to free the memory of the list element (TODO5: and its data payload)
 }
 
 
-int main() 
-{
-    itemType *my_list=NULL;
-    itemType *current;
+float min_gerade(Node * list) {
+    if (list == NULL) {
+        return 0;
+    }
 
-    current=create_item();
-    insert_item(current,&my_list);
-	current=create_item();
-    insert_item(current,&my_list);
+    Node * temp = list;
+    float data = temp -> d;
 
-	print_items(my_list);
+    while (temp != NULL) {
+        Node * next = temp -> next_item;
+        float next_data = next -> d;
+
+        if (next_data < data) {
+            data = next_data;
+        }
+
+        temp = next;
+    }
+
+    return data;
+}
+
+int main() {
+    Node *my_list = NULL;
+
+    Node *first = create_item();
+    insert_item(first, &my_list);
+
+    Node *other = create_item();
+    insert_item(other, &my_list);
+
+    printf("%f", min_gerade(&my_list));
+
+    print_items(my_list);
 }

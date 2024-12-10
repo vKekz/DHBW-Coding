@@ -19,4 +19,5 @@ add_executable(Malloc K700/703-malloc_eratosthenes.c)
 add_executable(FunctionPlotter K700/705-function-plotter.c)
 add_executable(LinkedList K700/706-linked_list.c)
 
-add_executable(Gedankenprotokoll gedankenProtokoll.c)
+add_executable(Gedankenprotokoll Other/gedankenProtokoll.c)
+add_executable(Other1 Other/other_1.c)
