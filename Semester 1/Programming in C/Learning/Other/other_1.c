@@ -53,7 +53,7 @@ float min_gerade(struct item * list) {
         struct item * next = temp -> next;
         float next_data = next -> data;
 
-        if (next_data / 2 == 0 && next_data < data) {
+        if ((int)next_data % 2 == 0 && next_data < data) {
             data = next_data;
         }
 
