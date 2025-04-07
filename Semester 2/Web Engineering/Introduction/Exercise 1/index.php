@@ -19,27 +19,6 @@
                 $combined = ($portions * $amount) . $type . " " . $key;
                 echo "- $combined <br>";
             }
-
-            // Aufgabe 2
-            $red = "red";
-            $blue = "blue";
-            $green = "green";
-            $aqua = "aqua";
-
-            // Aufgabe 3
-            $m = 70400;
-            $p = 31;
-            $a = 50;
-            $q = 14;
-
-            $x = round(sqrt((200 * $m * $a) / ($p * $q)));
-            echo "<h1>Aufgabe 3</h1>";
-            echo "Optimale Bestellmenge: $x";
         ?>
-    <style>
-        body {
-            background-color: <?php echo $aqua; ?>;
-        }
-    </style>
     </body>
 </html>
